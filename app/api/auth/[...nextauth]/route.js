@@ -25,6 +25,7 @@ export const authOptions = {
                     const newUser = await UserSchema.create({
                         email: user.email,
                         username: user.name,
+                        name: user.name,
                         image: user.image
                     })
                 }

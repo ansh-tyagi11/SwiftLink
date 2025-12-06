@@ -1,6 +1,24 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { getUser } from '@/actions/useractions'
 
 const TopNavBar = () => {
+    const { data: session, status } = useSession()
+    const [data, setData] = useState({})
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            userData();
+        }
+    }, [session])
+
+    const userData = async () => {
+        let data = await getUser(session.user.email)
+        setData(data)
+    }
+    console.log(data.name)
+
     return (
         <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 bg-white px-10 py-4 dark:border-slate-800 dark:bg-[#101122]">
             <label className="flex flex-col min-w-40 h-10! w-full max-w-sm">
@@ -17,12 +35,21 @@ const TopNavBar = () => {
             </label>
             <div className="flex flex-1 justify-end gap-4 items-center">
                 <div className="flex items-center gap-3">
-                    <div
+                    <img
                         className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                        style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBXCsiqPFZOvIuNZcLJBFnXYp-JrXZ3dPng225k3RaX4nm7beuTHwmrT_5SS6EXyHlgeLHuO3IKNin7ctNa5qIfUYr74V4YdKEcJU6sne_slO1sC9Tr2Ypv_rE-4FKcfQFe_24rLA4n0I43HeP2jlz5x-CIFoTBT01jPs25avaYLt3sIcQaZ0gldHbu21EM1dHUsyfM4tY7vW4tW3M8rN0_KW7W4S0NlJRqqzz0MXhCZe_unm26Xnq2vEUQniO5hCJgPIBU9fjDroqT")' }}
+                        src={`${data.image}`}
                     />
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Alex D.</span>
-                    <span className="material-symbols-outlined text-gray-600 dark:text-slate-400">expand_more</span>
+                    <div className='group flex items-center cursor-pointer'>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">{`${data.name}`}</span>
+                        <span className="material-symbols-outlined text-gray-600 dark:text-slate-400">expand_more</span>
+                        <div className='hidden group-hover:block bg-white/15 text-centre'>
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">{`${data.email}`}</span>
+                            <button onClick={() => signOut()} className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#0d121b] dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" >
+                                <span className="material-symbols-outlined text-xl">logout</span>
+                                <p className="text-sm font-medium leading-normal">Log out</p>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>

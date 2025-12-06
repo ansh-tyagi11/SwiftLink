@@ -1,9 +1,23 @@
+"use client"
 import React from "react";
-import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useSession } from 'next-auth/react';
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  const redirect = () => {
+    if (status === "authenticated") {
+      router.push("/home")
+    }
+    else if (status === "unauthenticated") {
+      router.push("/login")
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -31,7 +45,7 @@ export default function Home() {
                         placeholder="Paste a long URL here..."
                       />
                     </div>
-                    <button className="flex w-full sm:w-auto mt-2 sm:mt-0 min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg sm:rounded-l-none h-14 px-5 bg-linear-to-r from-[#6A11CB] to-[#2575FC] hover:from-[#5e0ebe] hover:to-[#1b68f0] text-white text-base font-bold leading-normal tracking-[0.015em] transition-all duration-200">
+                    <button onClick={() => redirect()} className="flex w-full sm:w-auto mt-2 sm:mt-0 min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg sm:rounded-l-none h-14 px-5 bg-linear-to-r from-[#6A11CB] to-[#2575FC] hover:from-[#5e0ebe] hover:to-[#1b68f0] text-white text-base font-bold leading-normal tracking-[0.015em] transition-all duration-200">
                       <span className="truncate">Shorten</span>
                     </button>
                   </div>

@@ -1,8 +1,30 @@
 "use client";
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SideBar from '@/components/SideBar';
+import { useSession } from 'next-auth/react';
+import { getUser } from '@/actions/useractions';
 
 export default function SwiftLinkSettings() {
+    const { data: session, status } = useSession();
+    const [data, setData] = useState({});
+    const [name, setName] = useState({ name: "" });
+
+    useEffect(() => {
+        if (status == "authenticated")
+            userData()
+    }, [session])
+
+    const userData = async () => {
+        let data = await getUser(session.user.email)
+        setData(data)
+    }
+    console.log(data)
+
+    const updateName = async () => {
+        let name = await getName(session.user.email, name)
+    }
+    console.log(name)
+
     return (
         <div className="flex h-screen w-full bg-gray-50">
             {/* Sidebar */}
@@ -26,7 +48,7 @@ export default function SwiftLinkSettings() {
                                     {/* Profile Picture */}
                                     <div className="flex flex-col items-center">
                                         <div className="relative">
-                                            <div className="h-24 w-24 rounded-full bg-linear-to-br from-purple-500 to-indigo-500"></div>
+                                            <img className='h-24 w-24 rounded-full' src={`${data.image}`} alt="" />
                                             <button className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white hover:bg-gray-100">
                                                 <span className="material-symbols-outlined text-lg text-gray-500">
                                                     edit
@@ -42,6 +64,9 @@ export default function SwiftLinkSettings() {
                                             <input
                                                 type="text"
                                                 name='text'
+                                                value={name.text}
+                                                defaultValue={`${data.name}`}
+                                                onChange={(e) => setName(e.target.value)}
                                                 className="h-11 w-full rounded-lg border border-gray-300 bg-transparent p-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                                 placeholder="Enter your full name"
                                             />
@@ -51,7 +76,7 @@ export default function SwiftLinkSettings() {
                                             <p className="pb-2 text-sm font-medium text-gray-900">Email Address</p>
                                             <input
                                                 type="email"
-                                                defaultValue="alex.morgan@swiftlink.io"
+                                                value={`${data.email}`}
                                                 className="h-11 w-full rounded-lg border border-gray-300 bg-gray-100 p-3 text-sm text-gray-500"
                                                 placeholder="Enter your email address"
                                                 readOnly
@@ -66,7 +91,7 @@ export default function SwiftLinkSettings() {
                                 <button className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-gray-200 px-4 text-sm font-medium text-gray-900 hover:bg-gray-300">
                                     Cancel
                                 </button>
-                                <button className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700">
+                                <button className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700" onClick={() => updateName()}>
                                     Save Changes
                                 </button>
                             </div>
