@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const [signUpData, setSignUpData] = useState({ name: "", email: "", password: "", });
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -17,16 +18,24 @@ export default function SignUpPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let data = await createUserAccount(signUpData);
+    setLoading(true);
 
-    if (!data) {
-      alert(`The email ${signUpData.email} is already registered. Please log in instead.`);
-      router.push('/login')
-    }
-    else if (data) {
-      router.push('/home')
-    }
-  }
+    setTimeout(async () => {
+
+      const data = await createUserAccount(signUpData);
+
+      setLoading(false);
+
+      if (!data) {
+        alert(`The email ${signUpData.email} is already registered. Please log in instead.`);
+        router.push("/login");
+      }
+      else {
+        router.push((`/otp?email=${data.email}`));
+      }
+
+    }, 1000);
+  };
 
   return (
 
@@ -132,8 +141,10 @@ export default function SignUpPage() {
                       </label>
                     </div>
 
-                    <button type="submit" className="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-linear-to-r from-violet-600 to-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em] transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]">
-                      <span className="truncate">Create Your Free Account</span>
+                    <button type="submit" className={`flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-linear-to-r from-violet-600 to-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em] transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]  ${loading && "opacity-50 cursor-not-allowed"
+                      }`}>
+                      {/* <span className="truncate">Create Your Free Account</span> */}
+                      {loading ? "Please wait..." : <span className="truncate">Create Your Free Account</span>}
                     </button>
 
                   </form>
