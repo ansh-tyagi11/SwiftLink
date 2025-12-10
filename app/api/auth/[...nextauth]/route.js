@@ -26,13 +26,18 @@ export const authOptions = {
                         email: user.email,
                         username: user.name,
                         name: user.name,
-                        image: user.image
+                        image: user.image,
+                        signUp: {
+                            password: user.password,
+                            name: user.name,
+                            email: user.email,
+                        },
                     })
                 }
             }
             return true;
         },
-         async session({ session, token, user }) {
+        async session({ session, token, user }) {
             const dbUser = await UserSchema.findOne({ email: session.user.email })
             session.user.name = dbUser.username
             session.user.image = session.user.image

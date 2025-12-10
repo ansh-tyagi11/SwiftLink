@@ -1,16 +1,39 @@
 "use client";
-import { useState, useRef } from "react";
-import { verifySignupOtp } from "@/actions/useractions";
+import { useState, useRef, useEffect } from "react";
+import { verifySignupOtp, resendSignupOtp } from "@/actions/useractions";
 import { useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function VerifyPage() {
   const searchParams = useSearchParams();
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const inputsRef = useRef([]);
-  const email = searchParams.email;
+  const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(60);
+  const email = searchParams.get("email");
+
+  useEffect(() => {
+    setLoading(true)
+    timer2();
+    const timer = setTimeout(() => {
+      setLoading(false)
+      console.log("hi i am set time out")
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [count])
+
+  const timer2 = () => {
+    if (count == 0) {
+      return;
+    }
+    const time = setTimeout(() => {
+      setCount(prev => prev - 1)
+    }, 1000)
+    return () => clearTimeout(time)
+  }
 
   const handleChange = (e, index) => {
-    const value = e.target.value.replace(/\D/, ""); // only digits
+    const value = e.target.value.replace(/\D/g, "");
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -28,15 +51,32 @@ export default function VerifyPage() {
 
   const verifyOtp = async () => {
     const otpValue = otp.join("");
+    if (!otpValue) {
+      toast("Kindly please fill otp.")
+      return;
+    }
     console.log("OTP entered:", otpValue);
     const result = await verifySignupOtp(email, otpValue);
     if (result.success) {
-      alert("OTP verified successfully! Your account is now active.");
+      toast("OTP verified successfully! Your account is now active.");
     } else {
-      alert("Invalid OTP. Please try again.");
+      toast("Invalid OTP. Please try again.");
     }
   };
 
+  const newOtp = async () => {
+    setLoading(true);
+    setCount(60);
+    let otp = await resendSignupOtp(email);
+    if (otp.success) {
+      toast("new Otp send to you email")
+    }
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return;
+  }
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center p-4 bg-background-light dark:bg-background-dark font-display text-[#131022] dark:text-white">
@@ -93,12 +133,15 @@ export default function VerifyPage() {
             >
               <span className="truncate">Verify Code</span>
             </button>
-            <div className="flex justify-between items-center w-full">
-              <p className="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal text-center underline cursor-pointer hover:text-primary dark:hover:text-white">Resend Code</p>
-            </div>
+            <button
+              disabled={loading}
+              onClick={newOtp} className={`flex justify-between items-center w-full ${loading ? " cursor-not-allowed opacity-50" : "cursor-pointer"}`}>
+              <p>{count}</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal text-center underline hover:text-primary dark:hover:text-white ">Resend Code</p>
+            </button>
           </div>
         </main>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
