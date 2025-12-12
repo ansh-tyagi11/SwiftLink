@@ -77,8 +77,8 @@ export default function VerifyPage() {
     }
     console.log("OTP entered:", otpValue);
     const result = await verifySignupOtp(email, otpValue);
-    if (result.success) {
-      toast("OTP verified successfully! Your account is now active.");
+    if (result.success && result.message) {
+      toast(result.message);
     } else {
       toast("Invalid OTP. Please try again.");
     }

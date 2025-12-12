@@ -26,10 +26,11 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let sendData = await generateLoginOtp(loginData)
-    if (!sendData) {
-      toast("No user found.Kindly sign up first.", { type: "error" })
-      router.push("/sign-up")
+
+    let sendData = await generateLoginOtp(loginData);
+
+    if (sendData.error) {
+      toast(sendData.error, { type: "error" });
     }
     else {
       router.push((`/otp?email=${sendData.email}&id=${sendData.OTPid}`));

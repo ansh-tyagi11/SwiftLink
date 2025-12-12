@@ -2,9 +2,9 @@
 import User from "@/models/User";
 import connectDB from "@/db/connectDB";
 import OtpStore from "@/models/OtpStore";
-import { sendEmail } from "@/lib/mailer";
 import argon2 from "argon2";
 import crypto from "crypto";
+import { sendEmails } from "@/lib/otpEmail";
 
 export const getUser = async (email) => {
     await connectDB();
@@ -39,7 +39,7 @@ export const createUserAccount = async (form) => {
 
     let existingUser = await User.findOne({ email: email }).lean();
     if (existingUser) {
-        return null;
+        return { error: "User already exists. Please login instead." };
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -53,31 +53,7 @@ export const createUserAccount = async (form) => {
         expiresAt: Date.now() + 5 * 60 * 1000,
     });
 
-    await sendEmail(form.email, "Your SwiftLink Verification Code (OTP)", `<div style="max-width: 600px; margin: 40px auto; padding: 30px; font-family: Arial, sans-serif; background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 10px; color: #333;">
-    <h2 style="color: #0070f3; text-align: center;">SwiftLink OTP Verification</h2>
-    <p>Hi <strong>${form.name}</strong>,</p>
-    <p>Thank you for verifying your account/request with SwiftLink.</p>
-    <p>To complete your <strong>registration</strong>, please use the following One-Time Password (OTP) code:</p>
-    <div style="text-align: center; margin: 20px 0;">
-     <span style="display: inline-block; padding: 15px 25px; font-size: 24px; font-weight: bold; background-color: #0070f3; color: #fff; border-radius: 8px; letter-spacing: 4px;">
-       ${otp}
-     </span>
-   </div>
-   <p>This code is valid for <strong>5 minutes</strong>. Please do not share this code with anyone for your security.</p>
-   <p>If you did not initiate this request, please disregard this email.</p>
-   <h4 style="margin-top: 30px; color: #555;">Important Security Note:</h4>
-   <p style="font-size: 14px; color: #555;">
-     Never share your OTP with anyone. SwiftLink personnel will never ask you for this code.
-   </p>
-   <p style="font-size: 14px; color: #555;">
-     If the OTP expires, you will need to request a new one on the SwiftLink website.
-   </p>
-   <p>Thank you for using SwiftLink!</p>
-   <p>Best regards,<br>
-   <strong>The SwiftLink Team</strong><br>
-   <a href="https://www.swiftlink.com" style="color: #0070f3; text-decoration: none;">www.swiftlink.com</a></p>
-   </div>
-`);
+    await sendEmails(form.email, form.name, otp)
 
     return { email, success: true, OTPid };
 }
@@ -106,11 +82,14 @@ export async function verifySignupOtp(email, otp) {
                 email: record.email,
             },
         });
+        await OtpStore.deleteMany({ email });
+
+        return { success: true, message: "OTP verified successfully! Your account is now active." };
     }
 
     await OtpStore.deleteMany({ email });
 
-    return { success: true };
+    return { success: true, message: "Your login successfull." };
 }
 
 export async function resendSignupOtp(email) {
@@ -125,31 +104,8 @@ export async function resendSignupOtp(email) {
     record.expiresAt = Date.now() + 5 * 60 * 1000;
     record.attempts = 3;
     await record.save();
-    await sendEmail(email, "Your SwiftLink Verification Code (OTP)", `<div style="max-width: 600px; margin: 40px auto; padding: 30px; font-family: Arial, sans-serif; background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 10px; color: #333;">
-    <h2 style="color: #0070f3; text-align: center;">SwiftLink OTP Verification</h2>
-    <p>Hi <strong>${record.name}</strong>,</p>
-    <p>Thank you for verifying your account/request with SwiftLink.</p>
-    <p>To complete your <strong>registration</strong>, please use the following One-Time Password (OTP) code:</p>
-    <div style="text-align: center; margin: 20px 0;">
-     <span style="display: inline-block; padding: 15px 25px; font-size: 24px; font-weight: bold; background-color: #0070f3; color: #fff; border-radius: 8px; letter-spacing: 4px;">             
-         ${otp}
-        </span>
-    </div>
-    <p>This code is valid for <strong>5 minutes</strong>. Please do not share this code with anyone for your security.</p>
-    <p>If you did not initiate this request, please disregard this email.</p>
-    <h4 style="margin-top: 30px; color: #555;">Important Security Note:</h4>
-    <p style="font-size: 14px; color: #555;">
-        Never share your OTP with anyone. SwiftLink personnel will never ask you for this code.
-    </p>
-    <p style="font-size: 14px; color: #555;">
-        If the OTP expires, you will need to request a new one on the SwiftLink website.
-    </p>
-    <p>Thank you for using SwiftLink!</p>
-    <p>Best regards,<br>
-    <strong>The SwiftLink Team</strong><br>
-    <a href="https://www.swiftlink.com" style="color: #0070f3; text-decoration: none;">www.swiftlink.com</a></p>
-    </div>
-`);
+    await sendEmails(email, record.name, otp)
+
     return { success: true };
 }
 
@@ -164,6 +120,7 @@ export async function checkId(email, id) {
     if (record.expiresAt < Date.now()) {
         return false;
     }
+
     return true;
 }
 
@@ -175,7 +132,7 @@ export const generateLoginOtp = async (form) => {
 
     const existing = await User.findOne({ "email": email }).lean();
     if (!existing) {
-        return null;
+        return { success: false, error: "User not found. Please sign up first." };
     }
 
     let userPassword = existing.signUp.password;
@@ -184,7 +141,7 @@ export const generateLoginOtp = async (form) => {
     const passwordMatch = await argon2.verify(userPassword, password);
 
     if (!passwordMatch) {
-        return null;
+        return { success: false, error: "Incorrect password." };
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -206,31 +163,7 @@ export const generateLoginOtp = async (form) => {
         expiresAt: Date.now() + 5 * 60 * 1000,
     });
 
-    await sendEmail(email, "Your SwiftLink Login Code (OTP)", `<div style="max-width: 600px; margin: 40px auto; padding: 30px; font-family: Arial, sans-serif; background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 10px; color: #333;">
-    <h2 style="color: #0070f3; text-align: center;">SwiftLink OTP Verification</h2>
-    <p>Hi <strong>${userName}</strong>,</p>
-    <p>Thank you for verifying your account/request with SwiftLink.</p>
-    <p>To complete your <strong>registration</strong>, please use the following One-Time Password (OTP) code:</p>
-    <div style="text-align: center; margin: 20px 0;">
-     <span style="display: inline-block; padding: 15px 25px; font-size: 24px; font-weight: bold; background-color: #0070f3; color: #fff; border-radius: 8px; letter-spacing: 4px;">             
-         ${otp}
-        </span>
-    </div>
-    <p>This code is valid for <strong>5 minutes</strong>. Please do not share this code with anyone for your security.</p>
-    <p>If you did not initiate this request, please disregard this email.</p>
-    <h4 style="margin-top: 30px; color: #555;">Important Security Note:</h4>
-    <p style="font-size: 14px; color: #555;">
-        Never share your OTP with anyone. SwiftLink personnel will never ask you for this code.
-    </p>
-    <p style="font-size: 14px; color: #555;">
-        If the OTP expires, you will need to request a new one on the SwiftLink website.
-    </p>
-    <p>Thank you for using SwiftLink!</p>
-    <p>Best regards,<br>
-    <strong>The SwiftLink Team</strong><br>
-    <a href="https://www.swiftlink.com" style="color: #0070f3; text-decoration: none;">www.swiftlink.com</a></p>
-    </div>
-`);
+    await sendEmails(email, userName, otp)
 
     return { email, success: true, OTPid };
 };

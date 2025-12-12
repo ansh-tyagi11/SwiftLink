@@ -35,8 +35,8 @@ export default function SignUpPage() {
 
       setLoading(false);
 
-      if (!data) {
-        toast(`The email ${signUpData.email} is already registered. Please log in instead.`);
+      if (data.error) {
+        toast(data.error);
         router.push("/login");
       }
       else {
