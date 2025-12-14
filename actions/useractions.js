@@ -5,7 +5,6 @@ import OtpStore from "@/models/OtpStore";
 import argon2 from "argon2";
 import crypto from "crypto";
 import { sendEmails } from "@/lib/otpEmail";
-import { error } from "console";
 
 export const getUser = async (email) => {
     await connectDB();
@@ -97,7 +96,7 @@ export async function verifySignupOtp(email, otp) {
     }
 
     await OtpStore.deleteMany({ email });
-    return { success: true, message: "Login successful." };
+    return { email, success: true, message: "Login successful.", redirect: "/home" };
 }
 
 export async function resendSignupOtp(email) {
