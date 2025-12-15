@@ -5,10 +5,9 @@ export default function Footer() {
     return (
         <footer className="flex flex-col gap-8 px-5 py-10 text-center border-t border-gray-200 dark:border-gray-800 overflow-x-hidden bg-[#f6f6f8] dark:bg-[#101622]">
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
-                <Link className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal hover:text-[#135bec]" href="#about">About Us</Link>
-                <Link className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal hover:text-[#135bec]" href="#contact">Contact</Link>
-                <Link className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal hover:text-[#135bec]" href="#terms">Terms of Service</Link>
-                <Link className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal hover:text-[#135bec]" href="#privacy">Privacy Policy</Link>
+                <Link className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal hover:text-[#135bec]" href="/about">About Us</Link>
+                <Link className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal hover:text-[#135bec]" href="/contact">Contact</Link>
+                <Link className="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal hover:text-[#135bec]" href="/privacy-policy">Privacy Policy</Link>
             </div>
             <div className="flex flex-wrap justify-center gap-6">
                 <Link aria-label="Twitter" href="#twitter">

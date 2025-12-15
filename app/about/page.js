@@ -5,11 +5,10 @@ import Footer from "@/components/Footer";
 export default function About() {
     return (
         <>
-            <Navbar className="bg-[#f6f6f8] dark:bg-[#101622] text-slate-900 dark:text-white font-manrope overflow-x-hidden antialiased" />
+            <Navbar />
             <div
                 className="bg-[#f6f6f8] dark:bg-[#101622] text-slate-900 dark:text-white font-manrope overflow-x-hidden antialiased">
                 <div className="relative flex min-h-screen flex-col">
-                    {/* <!-- TopNavBar --> */}
 
                     <main className="grow">
                         {/* <!-- HeroSection --> */}

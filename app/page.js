@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <>
-      <Navbar className="relative flex w-full flex-col overflow-x-hidden bg-[#f6f6f8] dark:bg-[#101622]"/>
+      <Navbar />
       <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-[#f6f6f8] dark:bg-[#101622]">
         <div className="layout-container flex h-full grow flex-col">
           <div className="px-4 pt-0 sm:px-10 md:px-20 lg:px-40 flex flex-1 justify-center py-5">
