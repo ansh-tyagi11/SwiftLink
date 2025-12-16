@@ -67,34 +67,6 @@ export default function VerifyPage() {
     }
   };
 
-  // const handleVerifyOtp = async () => {
-  //   const otpValue = otpDigits.join("");
-  //   if (!otpValue) {
-  //     toast.warning("Please enter the OTP.");
-  //     return;
-  //   }
-  //   if (otpValue.length !== 6) {
-  //     toast.warning("OTP must be 6 digits.");
-  //     return;
-  //   }
-  //   // const result = await verifySignupOtp(email, otpValue);
-  //   const res = await fetch("/api/verify-otp", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ email, otp: otpValue }),
-  //   });
-
-  //   console.log(res);
-  //   let data = await res.json();
-
-  //   if (res.ok && data.message) {
-  //     toast.success(result.message);
-  //     // router.push("/home");
-  //   } else {
-  //     toast("Invalid OTP. Please try again.");
-  //   }
-  // };
-
   const handleVerifyOtp = async () => {
     const otpValue = otpDigits.join("");
 
@@ -103,7 +75,7 @@ export default function VerifyPage() {
       return;
     }
 
-    const res = await fetch("http://localhost:3000/api/verify-otp", {
+    const res = await fetch("/api/verify-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, otp: otpValue }),

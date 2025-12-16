@@ -8,15 +8,10 @@ const TopNavBar = () => {
     const [data, setData] = useState({})
 
     useEffect(() => {
+        if (status === "loading") return;
+
         userData();
-    }, [])
-
-    useEffect(() => {
-        if (status === "authenticated") {
-            userData();
-        }
-    }, [session, status])
-
+    }, [status]);
 
     const userData = async () => {
         try {

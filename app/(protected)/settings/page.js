@@ -11,13 +11,11 @@ export default function SwiftLinkSettings() {
     const [name, setName] = useState("");
 
     useEffect(() => {
-        userData();
-    }, [])
+        if (status === "loading") return;
 
-    useEffect(() => {
-        if (status == "authenticated")
-            userData()
-    }, [session])
+        userData();
+    }, [status]);
+
 
     const userData = async () => {
         try {
@@ -26,13 +24,13 @@ export default function SwiftLinkSettings() {
                 setData(data)
             }
             const res = await fetch("/api/verifyUser");
-            const data2 = await res.json();
-            let a = await getUser(data2.user)
-            if (a) {
-                // setEmail(a)
-                setData(a)
+            const verifyResponse = await res.json();
+            let verifyiedUser = await getUser(verifyResponse.user)
+            if (verifyiedUser) {
+                setData(verifyiedUser)
+                setName(verifyiedUser.name)
             }
-            console.log(data2.user);
+            console.log(verifyResponse.user);
         }
         catch (error) {
             console.log(error)
@@ -41,7 +39,7 @@ export default function SwiftLinkSettings() {
     console.log(data)
 
     const updateName = async () => {
-        const updatedName = await getName(name, session.user.email);
+        const updatedName = await getName(name, session?.user?.email || data.email);
         setName(updatedName)
     }
     console.log(name)
@@ -85,7 +83,6 @@ export default function SwiftLinkSettings() {
                                             <input
                                                 type="text"
                                                 name='text'
-                                                value={name.text}
                                                 defaultValue={`${data.name}`}
                                                 onChange={(e) => setName(e.target.value)}
                                                 className="h-11 w-full rounded-lg border border-gray-300 bg-transparent p-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -110,7 +107,7 @@ export default function SwiftLinkSettings() {
 
                             {/* Action Buttons */}
                             <div className="flex items-center justify-end gap-3 rounded-b-xl border-t border-gray-200 bg-gray-50 px-6 py-4">
-                                <button className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-gray-200 px-4 text-sm font-medium text-gray-900 hover:bg-gray-300">
+                                <button onClick={() => setName(`${data.name}`)} className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-gray-200 px-4 text-sm font-medium text-gray-900 hover:bg-gray-300">
                                     Cancel
                                 </button>
                                 <button className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700" disabled={!name} onClick={updateName}>
