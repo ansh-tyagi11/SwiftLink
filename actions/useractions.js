@@ -231,28 +231,10 @@ export async function forShortUrl(originalUrl, email) {
     return { success: true, message: "Url shorten is created." }
 }
 
-// export async function forUserlink(email) {
-//     await connectDB();
-
-//     let a1 = await User.findOne(email)
-//     console.log(a1)
-//     let a2 = a1._id
-
-//     let a3 = await ShortUrl.find({ owner: a2 }).lean();
-
-//     a3.forEach(obj => delete obj._id);
-
-//     console.log(a3)
-//     console.log(
-//         "HI"
-//     )
-//     return { success: true, a3 };
-// }
-
 export async function forUserlink(email) {
     await connectDB();
     console.log(email)
-    // 1. Find the user
+
     const user = await User.findOne({ email });
     if (!user) {
         return { success: false, message: "User not found" };
@@ -260,15 +242,12 @@ export async function forUserlink(email) {
 
     const userId = user._id;
 
-    // 2. Find user's short URLs as plain objects
     let links = await ShortUrl.find({ owner: userId }).lean();
 
-    // 3. Convert to Client-safe format
     links.forEach(link => {
-        delete link._id;           // remove MongoDB id
-        if (link.owner) link.owner = link.owner.toString(); // convert ObjectId to string
+        delete link._id;
+        if (link.owner) link.owner = link.owner.toString();
     });
 
-    // 4. Return result
     return { success: true, links };
 }
