@@ -10,7 +10,7 @@ import useUserLinks from '../hooks/useUserLinks';
 
 export default function SwiftLinkHome() {
     const { data, session } = useUserData();
-    const { links } = useUserLinks();
+    const { sortedLinks, setLinks } = useUserLinks();
     const [link, setLink] = useState("");
 
     const shortUrl = async (e) => {
@@ -25,6 +25,7 @@ export default function SwiftLinkHome() {
         if (afterShortUrl.success) {
             toast.success(afterShortUrl.message)
             setLink("")
+            setLinks(prev => [afterShortUrl.newUrl, ...prev]);
         }
     }
 
@@ -65,24 +66,25 @@ export default function SwiftLinkHome() {
                                 <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
                                 <div className="mt-6 flex flex-col gap-4">
 
-                                    {links.length > 0 ?
-                                        links.map((li) => {
-                                           return (
-                                            <div key={li.shortId} className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md">
-                                                <div className="flex flex-col gap-1">
-                                                    <p className="text-base font-semibold text-indigo-500">{process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}</p>
-                                                    <p className="text-sm text-gray-600 truncate max-w-md">{li.originalUrl}</p>
+                                    {sortedLinks.length > 0 ?
+                                        sortedLinks.map((li) => {
+                                            return (
+                                                <div key={li.shortId} className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md">
+                                                    <div className="flex flex-col gap-1">
+                                                        <p className="text-base font-semibold text-indigo-500">{process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}</p>
+                                                        <p className="text-sm text-gray-600 truncate max-w-md">{li.originalUrl}</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-6">
+                                                        <p className="text-sm text-gray-600 whitespace-nowrap">{li.clicks}clicks - {Math.floor((Date.now() - new Date(li.createdAt)) / (1000 * 60))} mins ago</p>
+                                                        <button onClick={() => navigator.clipboard.writeText(
+                                                            `${process.env.NEXT_PUBLIC_BASE_URL}/${li.shortId}`
+                                                        )} className="p-2 rounded-lg hover:bg-slate-100 text-gray-600">
+                                                            <span className="text-xl">📋</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center gap-6">
-                                                    <p className="text-sm text-gray-600 whitespace-nowrap">45 clicks - 2 mins ago</p>
-                                                    <button onClick={() => navigator.clipboard.writeText(
-                                                        `${process.env.NEXT_PUBLIC_BASE_URL}/${li.shortId}`
-                                                    )} className="p-2 rounded-lg hover:bg-slate-100 text-gray-600">
-                                                        <span className="text-xl">📋</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}) :
+                                            )
+                                        }) :
                                         <div className='flex items-center justify-center'>No Links found.</div>
                                     }
                                 </div>

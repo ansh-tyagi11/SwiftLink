@@ -11,7 +11,7 @@ export default function About() {
                 <div className="relative flex min-h-screen flex-col">
 
                     <main className="grow">
-                        {/* <!-- HeroSection --> */}
+                        {/*  HeroSection  */}
                         <section className="px-4 md:px-40 py-10 md:py-20 flex justify-center bg-white dark:bg-[#101622]">
                             <div className="flex flex-col max-w-[960px] w-full gap-8 lg:flex-row items-center">
                                 <div className="flex flex-col gap-6 lg:w-1/2">
@@ -50,7 +50,7 @@ export default function About() {
 
                             </div>
                         </section>
-                        {/* <!-- Stats --> */}
+                        {/*  Stats  */}
 
                         <section
                             className="bg-linear-to-b from-background-light dark:from-[#0c111a] to-white dark:to-background-dark py-16 md:py-20 -mt-10 md:-mt-16 relative z-10">
@@ -91,7 +91,7 @@ export default function About() {
                                 </div>
                             </div>
                         </section>
-                        {/* <!-- FeatureSection (Mission & Vision) --> */}
+                        {/*  FeatureSection (Mission & Vision)  */}
                         <section className="py-20 px-4 md:px-40 bg-white dark:bg-[#101622]">
                             <div className="flex justify-center">
                                 <div className="flex flex-col max-w-[960px] w-full gap-12">
@@ -139,7 +139,7 @@ export default function About() {
                             </div>
                         </section>
 
-                        {/* <!-- Team Section --> */}
+                        {/*  Team Section  */}
                         <section
                             className="py-20 px-4 md:px-40 bg-white dark:bg-[#101622] border-t border-slate-100 dark:border-slate-800">
                             <div className="flex justify-center">
@@ -149,7 +149,7 @@ export default function About() {
                                         <p className="text-slate-600 dark:text-slate-400">The minds behind the links.</p>
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                                        {/* <!-- Member 1 --> */}
+                                        {/*  Member 1  */}
                                         <div className="flex flex-col items-center text-center group">
                                             <div
                                                 className="w-32 h-32 mb-4 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-800 group-hover:border-[#135bec] transition-colors">
@@ -162,7 +162,7 @@ export default function About() {
                                             <p className="text-sm text-slate-500 dark:text-slate-400">Visionary leader with 10+ years in
                                                 SaaS.</p>
                                         </div>
-                                        {/* <!-- Member 2 --> */}
+                                        {/*  Member 2  */}
                                         <div className="flex flex-col items-center text-center group">
                                             <div
                                                 className="w-32 h-32 mb-4 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-800 group-hover:border-[#135bec] transition-colors">
@@ -175,7 +175,7 @@ export default function About() {
                                             <p className="text-sm text-slate-500 dark:text-slate-400">System architect &amp; security
                                                 expert.</p>
                                         </div>
-                                        {/* <!-- Member 3 --> */}
+                                        {/*  Member 3  */}
                                         <div className="flex flex-col items-center text-center group">
                                             <div
                                                 className="w-32 h-32 mb-4 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-800 group-hover:border-[#135bec] transition-colors">
@@ -188,7 +188,7 @@ export default function About() {
                                             <p className="text-sm text-[#135bec] font-medium mb-2">Head of Product</p>
                                             <p className="text-sm text-slate-500 dark:text-slate-400">Obsessed with user experience.</p>
                                         </div>
-                                        {/* <!-- Member 4 --> */}
+                                        {/*  Member 4  */}
                                         <div className="flex flex-col items-center text-center group">
                                             <div
                                                 className="w-32 h-32 mb-4 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-800 group-hover:border-[#135bec] transition-colors">
@@ -206,11 +206,11 @@ export default function About() {
                                 </div>
                             </div>
                         </section>
-                        {/* <!-- CTA Section --> */}
+                        {/*  CTA Section  */}
                         <section className="py-20 px-4">
                             <div
                                 className="max-w-[960px] mx-auto bg-[#135bec] rounded-2xl p-10 md:p-16 text-center text-white relative overflow-hidden shadow-2xl">
-                                {/* <!-- decorative circles --> */}
+                                {/*  decorative circles  */}
                                 <div
                                     className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl">
                                 </div>

@@ -206,7 +206,6 @@ export async function forShortUrl(originalUrl, email) {
     let link = originalUrl.trim()
 
     if (!link.startsWith("http://") && !link.startsWith("https://")) {
-        // http://localhost:3000/home
         link = "http://" + link;
     }
 
@@ -222,13 +221,13 @@ export async function forShortUrl(originalUrl, email) {
         return { success: false, message: "This url shorten already have." }
     }
 
-    await ShortUrl.create({
+    let newUrl = await ShortUrl.create({
         originalUrl: link,
         shortId: shortId,
         owner: user._id,
     })
 
-    return { success: true, message: "Url shorten is created." }
+    return { newUrl, success: true, message: "Url shorten is created." }
 }
 
 export async function forUserlink(email) {
@@ -245,9 +244,17 @@ export async function forUserlink(email) {
     let links = await ShortUrl.find({ owner: userId }).lean();
 
     links.forEach(link => {
-        delete link._id;
+        if (link._id) link._id = link._id.toString();
         if (link.owner) link.owner = link.owner.toString();
     });
 
     return { success: true, links };
+}
+
+export async function deleteLink2(id) {
+    await connectDB()
+    let find = await ShortUrl.deleteOne({ _id: id })
+
+    return { success: true, message: "Link deleted succesfully." }
+
 }
