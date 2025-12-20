@@ -13,7 +13,7 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="font-display bg-background-light dark:bg-background-dark text-[#171A1C] dark:text-gray-200">
+        <div className="font-display bg-[#f6f6f8]  dark:bg-[#101622]  text-[#171A1C] dark:text-gray-200">
             <div className="relative flex min-h-screen w-full flex-col">
                 <div className="flex h-full w-full flex-1">
 
@@ -41,7 +41,7 @@ export default function Dashboard() {
                                                 <span className="material-symbols-outlined text-xl">search</span>
                                             </div>
                                             <input
-                                                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#151C2C] focus:border-primary h-full placeholder:text-[#4c669a] dark:placeholder:text-gray-500 px-3 pl-2 text-sm"
+                                                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#151C2C] focus:border-[#135bec] h-full placeholder:text-[#4c669a] dark:placeholder:text-gray-500 px-3 pl-2 text-sm"
                                                 placeholder="Search your links..."
                                             />
                                         </div>
@@ -73,7 +73,7 @@ export default function Dashboard() {
                                                 <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                         <div className="flex items-center gap-2">
-                                                            <Link className="font-medium text-primary hover:underline" href="#">{process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}</Link>
+                                                            <Link className="font-medium text-[#135bec] hover:underline" href="#">{process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}</Link>
                                                             <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                                                                 <span className="material-symbols-outlined text-base">content_copy</span>
                                                             </button>

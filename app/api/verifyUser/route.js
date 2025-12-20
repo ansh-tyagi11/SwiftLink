@@ -15,5 +15,5 @@ export async function GET() {
         path: "/",
     });
 
-    return NextResponse.json({ user: session.value })
+    return NextResponse.json({ success: true, user: session.value })
 }

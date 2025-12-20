@@ -5,14 +5,16 @@ import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { generateLoginOtp } from "@/actions/useractions";
 import { toast } from "react-toastify";
+import isActive from "../hooks/isActive";
 
 export default function Login() {
   const { data: session, status } = useSession();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const router = useRouter();
+  const { data } = isActive();
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status === "authenticated" || data) {
       router.push("/home");
     }
   }, [status, router]);
@@ -37,7 +39,7 @@ export default function Login() {
 
   return (
     <div className="font-display">
-      <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+      <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-lightdark:bg-[#191022]  group/design-root overflow-x-hidden">
         <div className="flex flex-1 w-full">
           <div className="flex flex-1 lg:grid lg:grid-cols-2">
             {/* Left Side */}
@@ -48,7 +50,7 @@ export default function Login() {
                   alt="Abstract background with intersecting glowing lines in violet and blue, representing connectivity and speed."
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuATEwyGmV96NOkxR1TyXBzR7kgKMcPflwLxgmOoLtuGcskVDdvitLgjpK8dltuQkY5-L8O8OAeHTgywtJt7BmfSqJbFvVJIO0pgmwAQiMdrCip8FrohJsJr7VTHkRprX0EG6JG6pnG5RvV9RdJuOZOhkTH0ltIOD6pxStUNRSQx_lFVJpFHH2B5Nq2WzsNSdkgWZWpZp_rMa4Xq6_9uL2OTq69IGwd9VI3nxuGJLnrF1bOyJ__xMVVrEKz9-YxS9Li7MpFr75faR6A"
                 />
-                <div className="absolute inset-0 bg-linear-to-br from-primary/50 via-transparent to-blue-500/30"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-[#7f13ec]/50 via-transparent to-blue-500/30"></div>
               </div>
               <div className="relative z-10 flex flex-col items-start p-16 text-white">
                 <h2 className="text-4xl font-bold tracking-tighter text-white mb-2">
@@ -61,7 +63,7 @@ export default function Login() {
             </div>
 
             {/* Right Side */}
-            <div className="flex w-full flex-1 items-center justify-center bg-background-light dark:bg-background-dark p-4 sm:p-6 lg:p-8">
+            <div className="flex w-full flex-1 items-center justify-center bg-background-lightdark:bg-[#191022]  p-4 sm:p-6 lg:p-8">
               <div className="flex w-full max-w-md flex-col items-center justify-center py-10">
                 <div className="w-full">
                   <div className="text-center lg:text-left">
@@ -86,7 +88,7 @@ export default function Login() {
                             name="email"
                             value={credentials.email}
                             autoComplete="email"
-                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#140d1b] dark:text-gray-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dbcfe7] dark:border-gray-700 bg-background-light dark:bg-background-dark h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-3 text-base font-normal leading-normal"
+                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#140d1b] dark:text-gray-200 focus:outline-0 focus:ring-2 focus:ring-[#7f13ec]/50 border border-[#dbcfe7] dark:border-gray-700 bg-background-lightdark:bg-[#191022]  h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-3 text-base font-normal leading-normal"
                             placeholder="Enter your email address"
                             required
                             onChange={handleInputChange}
@@ -101,7 +103,7 @@ export default function Login() {
                             <p className="text-[#140d1b] dark:text-gray-200 text-base font-medium leading-normal">
                               Password
                             </p>
-                            <Link className="text-primary hover:underline text-sm font-medium leading-normal" href="#">
+                            <Link className="text-[#7f13ec] hover:underline text-sm font-medium leading-normal" href="#">
                               Forgot Password?
                             </Link>
                           </div>
@@ -112,18 +114,18 @@ export default function Login() {
                               name="password"
                               value={credentials.password}
                               autoComplete="password"
-                              className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-lg text-[#140d1b] dark:text-gray-200 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-r-0 border-[#dbcfe7] dark:border-gray-700 bg-background-light dark:bg-background-dark h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-3 pr-2 text-base font-normal leading-normal"
+                              className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-lg text-[#140d1b] dark:text-gray-200 focus:outline-0 focus:ring-2 focus:ring-[#7f13ec]/50 border border-r-0 border-[#dbcfe7] dark:border-gray-700 bg-[#f7f6f8]  dark:bg-[#191022]  h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-3 pr-2 text-base font-normal leading-normal"
                               placeholder="Enter your password"
                               required
                               onChange={handleInputChange}
                             />
-                            <div className="text-gray-500 dark:text-gray-400 flex border border-l-0 border-[#dbcfe7] dark:border-gray-700 bg-background-light dark:bg-background-dark items-center justify-center px-3 rounded-r-lg"></div>
+                            <div className="text-gray-500 dark:text-gray-400 flex border border-l-0 border-[#dbcfe7] dark:border-gray-700 bg-[#f7f6f8]  dark:bg-[#191022]  items-center justify-center px-3 rounded-r-lg"></div>
                           </div>
                         </label>
                       </div>
 
                       {/* Login button */}
-                      <button type="submit" className="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-linear-to-r from-primary to-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
+                      <button type="submit" className="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-linear-to-r from-[#7f13ec] to-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
                         <span className="truncate">Log In</span>
                       </button>
                     </div>
@@ -138,7 +140,7 @@ export default function Login() {
                   </div>
 
                   {/* Google Login */}
-                  <button className="flex mb-5 w-full items-center justify-center gap-3 rounded-lg border border-[#dbcfe7] dark:border-gray-700 bg-background-light dark:bg-background-dark px-4 py-3 text-base font-medium text-[#140d1b] dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => signIn("google")}>
+                  <button className="flex mb-5 w-full items-center justify-center gap-3 rounded-lg border border-[#dbcfe7] dark:border-gray-700 bg-[#f7f6f8]  dark:bg-[#191022]  px-4 py-3 text-base font-medium text-[#140d1b] dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => signIn("google")}>
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -172,7 +174,7 @@ export default function Login() {
                     <span>Continue with Google</span>
                   </button>
 
-                  <button className="flex w-full items-center justify-center gap-3 rounded-lg border border-[#dbcfe7] dark:border-gray-700 bg-background-light dark:bg-background-dark px-4 py-3 text-base font-medium text-[#140d1b] dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => signIn("github")}>
+                  <button className="flex w-full items-center justify-center gap-3 rounded-lg border border-[#dbcfe7] dark:border-gray-700 bg-background-lightdark:bg-[#191022]  px-4 py-3 text-base font-medium text-[#140d1b] dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => signIn("github")}>
                     <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                       viewBox="0 0 73 73" version="1.1">
                       <g id="team-collaboration/version-control/github" stroke="none" strokeWidth="1" fill="none"
@@ -195,7 +197,7 @@ export default function Login() {
 
                   <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
                     Don't have an account?
-                    <a className="font-medium text-primary hover:underline" href="/sign-up">
+                    <a className="font-medium text-[#7f13ec] hover:underline" href="/sign-up">
                       {" "}
                       Sign Up
                     </a>

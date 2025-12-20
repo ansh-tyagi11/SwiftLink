@@ -4,16 +4,18 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
+import isActive from "./hooks/isActive";
 
 export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const { data } = isActive();
 
   const redirect = () => {
-    if (status === "authenticated") {
+    if (status === "authenticated" || data) {
       router.push("/home")
     }
-    else if (status === "unauthenticated") {
+    if (status === "unauthenticated") {
       router.push("/login")
     }
   }
@@ -41,7 +43,7 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row min-w-40 w-full max-w-[640px] mt-4">
                     <div className="flex w-full flex-1 items-stretch rounded-lg sm:rounded-r-none h-14">
                       <input
-                        className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg sm:rounded-r-none text-gray-800 focus:outline-0 focus:ring-2 focus:ring-[#135bec]/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal leading-normal"
+                        className="form-input sm:py-0 py-4 flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg sm:rounded-r-none text-gray-800 focus:outline-0 focus:ring-2 focus:ring-[#135bec]/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 text-base font-normal leading-normal"
                         placeholder="Paste a long URL here..."
                       />
                     </div>

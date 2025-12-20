@@ -107,7 +107,7 @@ export default function VerifyPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <header className="flex items-center justify-center gap-4 text-[#100d1b] dark:text-white mb-8">
-          <div className="h-8 w-8 text-primary">
+          <div className="h-8 w-8 text-[#6765f1]">
             <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_6_535)">
                 <path clipRule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fillRule="evenodd" />
@@ -123,7 +123,7 @@ export default function VerifyPage() {
         </header>
 
         {/* Main */}
-        <main className="w-full flex flex-col items-center bg-white dark:bg-background-dark/50 p-8 rounded-xl shadow-lg shadow-gray-200/50 dark:shadow-none border border-gray-200 dark:border-white/10">
+        <main className="w-full flex flex-col items-center bg-white dark:[#111122]/50 p-8 rounded-xl shadow-lg shadow-gray-200/50 dark:shadow-none border border-gray-200 dark:border-white/10">
           <div className="flex w-full flex-col gap-3 text-center mb-8">
             <span className="material-symbols-outlined text-4xl" data-icon="mail_lock">mail_lock</span>
             <p className="text-[#100d1b] dark:text-white text-3xl font-black leading-tight tracking-[-0.033em]">Verify Your Account</p>
@@ -141,7 +141,7 @@ export default function VerifyPage() {
                   type="text"
                   inputMode="numeric"
                   maxLength={1}
-                  className="flex h-14 w-12 text-center text-lg font-bold [appearance:textfield] focus:outline-0 focus:ring-2 focus:ring-primary dark:bg-background-dark dark:text-white rounded-lg border border-gray-300 dark:border-white/20 focus:border-primary [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  className="flex h-14 w-12 text-center text-lg font-bold [appearance:textfield] focus:outline-0 focus:ring-2 focus:ring-[#6765f1] dark:[#111122] dark:text-white rounded-lg border border-gray-300 dark:border-white/20 focus:border-[#6765f1] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   value={digit}
                   onChange={(e) => handleInputChange(e, index)}
                   onKeyDown={(e) => handleInputKeyDown(e, index)}
@@ -161,10 +161,10 @@ export default function VerifyPage() {
             </button>
 
             <button disabled={isCountingDown} onClick={handleResendOtp} className="flex justify-between items-center w-full">
-              <p className={`text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal text-center underline hover:text-primary dark:hover:text-white ${isCountingDown ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}>
+              <p className={`text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal text-center underline hover:text-[#6765f1] dark:hover:text-white ${isCountingDown ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}>
                 Resend Code
               </p>
-              <p className={`${isCountingDown ? "inline text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal text-center hover:text-primary dark:hover:text-white" : "hidden"}`}>
+              <p className={`${isCountingDown ? "inline text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal text-center hover:text-[#6765f1] dark:hover:text-white" : "hidden"}`}>
                 You can resend the code in {secondsLeft} seconds.
               </p>
             </button>

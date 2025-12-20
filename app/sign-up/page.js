@@ -49,7 +49,7 @@ export default function SignUpPage() {
 
   return (
     <div className="font-display">
-      <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+      <div className="relative flex h-auto min-h-screen w-full flex-col bg-[#f7f6f8]  dark:bg-[#191022] group/design-root overflow-x-hidden">
         <div className="layout-container flex h-full grow flex-col">
           <div className="flex flex-1 items-stretch">
             <div className="flex min-h-screen w-full flex-col lg:flex-row">
@@ -92,7 +92,7 @@ export default function SignUpPage() {
               </div>
 
               {/* Right Pane: Sign-up Form */}
-              <div className="flex w-full flex-1 items-center justify-center bg-background-light pb-0 py-12 px-4 dark:bg-background-dark sm:px-6 lg:w-1/2 lg:px-8">
+              <div className="flex w-full flex-1 items-center justify-center bg-[#f7f6f8]  pb-0 py-12 px-4 dark:bg-[#191022] sm:px-6 lg:w-1/2 lg:px-8">
                 <div className="w-full max-w-md space-y-8">
                   <div>
                     <h2 className="text-center text-4xl font-black leading-tight tracking-[-0.033em] text-[#140d1b] dark:text-white">
@@ -112,7 +112,7 @@ export default function SignUpPage() {
                           name="name"
                           value={form.name}
                           autoComplete="name"
-                          className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#140d1b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dbcfe7] dark:border-[#3a2f44] bg-[#faf8fc] dark:bg-[#1f142b] focus:border-primary h-14 placeholder:text-[#734c9a] p-[15px] text-base font-normal leading-normal"
+                          className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#140d1b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-bg-[#7f13ec] /50 border border-[#dbcfe7] dark:border-[#3a2f44] bg-[#faf8fc] dark:bg-[#1f142b] focus:border-bg-[#7f13ec]  h-14 placeholder:text-[#734c9a] p-[15px] text-base font-normal leading-normal"
                           placeholder="Enter your full name"
                           required
                           onChange={handleInputChange}
@@ -126,7 +126,7 @@ export default function SignUpPage() {
                           name="email"
                           value={form.email}
                           autoComplete="email"
-                          className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#140d1b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dbcfe7] dark:border-[#3a2f44] bg-[#faf8fc] dark:bg-[#1f142b] focus:border-primary h-14 placeholder:text-[#734c9a] p-[15px] text-base font-normal leading-normal"
+                          className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#140d1b] dark:text-white focus:outline-0 focus:ring-2 focus:ring-bg-[#7f13ec] /50 border border-[#dbcfe7] dark:border-[#3a2f44] bg-[#faf8fc] dark:bg-[#1f142b] focus:border-bg-[#7f13ec]  h-14 placeholder:text-[#734c9a] p-[15px] text-base font-normal leading-normal"
                           placeholder="Enter your email address"
                           required
                           onChange={handleInputChange}
@@ -135,7 +135,7 @@ export default function SignUpPage() {
 
                       <label className="flex flex-col">
                         <p className="text-base font-medium leading-normal pb-2 text-[#140d1b] dark:text-white">Password</p>
-                        <div className="flex w-full flex-1 items-stretch rounded-lg border border-[#dbcfe7] dark:border-[#3a2f44] bg-[#faf8fc] dark:bg-[#1f142b] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/50">
+                        <div className="flex w-full flex-1 items-stretch rounded-lg border border-[#dbcfe7] dark:border-[#3a2f44] bg-[#faf8fc] dark:bg-[#1f142b] focus-within:border-bg-[#7f13ec]  focus-within:ring-2 focus-within:ring-bg-[#7f13ec] /50">
                           <input
                             type="password"
                             name="password"
@@ -222,7 +222,7 @@ export default function SignUpPage() {
 
                   <p className="text-center text-sm">
                     <span className="text-[#140d1b]/70 dark:text-white/70">Already have an account?</span>
-                    <Link className="font-semibold text-primary hover:underline" href="/login">Log In</Link>
+                    <Link className="font-semibold text-bg-[#7f13ec]  hover:underline" href="/login">Log In</Link>
                   </p>
                 </div>
               </div>
