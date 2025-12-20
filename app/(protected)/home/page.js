@@ -2,8 +2,8 @@
 import React from 'react'
 import SideBar from '@/components/SideBar';
 import TopNavBar from '@/components/TopNavBar';
-import { useState, useEffect } from 'react';
-import { forShortUrl } from '@/actions/useractions';
+import { useState } from 'react';
+// import { forShortUrl } from '@/actions/useractions';
 import useUserData from '../hooks/useUserData';
 import { toast } from 'react-toastify';
 import useUserLinks from '../hooks/useUserLinks';
@@ -16,17 +16,27 @@ export default function SwiftLinkHome() {
     const shortUrl = async (e) => {
         e.preventDefault();
 
-        let afterShortUrl = await forShortUrl(link, data.email || session.user.email)
+        let email = data?.email || session?.user?.email
+        // let afterShortUrl = await forShortUrl(link, data.email || session.user.email)
+
+        let res = await fetch("api/shorten", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ originalUrl: link, email }),
+        });
+        const afterShortUrl = await res.json();
+
 
         if (!afterShortUrl.success) {
             toast.error(afterShortUrl.message)
-            setLink("")
+            return;
         }
         if (afterShortUrl.success) {
             toast.success(afterShortUrl.message)
-            setLink("")
             setLinks(prev => [afterShortUrl.newUrl, ...prev]);
+            return;
         }
+        setLink(" ");
     }
 
     return (

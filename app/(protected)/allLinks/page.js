@@ -79,7 +79,7 @@ export default function Dashboard() {
                                                             </button>
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap truncate max-w-xs">
+                                                    <td className="px-6 max-w-2.5 py-4 whitespace-nowrap truncate">
                                                         <span title={`${li.originalUrl}`}>{li.originalUrl}</span>
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap">{li.clicks}</td>

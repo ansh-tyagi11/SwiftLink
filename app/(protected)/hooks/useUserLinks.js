@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import useUserData from "./useUserData";
-import { forUserlink, deleteLink2 } from "@/actions/useractions";
+import { forUserlink, deleteLink } from "@/actions/useractions";
 import { toast } from "react-toastify";
 
 export default function useUserLinks() {
@@ -20,11 +20,11 @@ export default function useUserLinks() {
         getLink();
     }, [data?.email, session?.user?.email]);
 
-    const deleteLink = async (id) => {
-        let a = await deleteLink2(id)
-        if (a.success) {
+    const deleteLinkHandler = async (id) => {
+        const result = await deleteLink(id);
+        if (result.success) {
             setLinks(prev => prev.filter(link => link._id !== id));
-            toast.success(a.message)
+            toast.success(result.message);
         }
     };
 
@@ -36,5 +36,5 @@ export default function useUserLinks() {
     console.log(links)
     console.log("links is array:", Array.isArray(links), links.length);
 
-    return { sortedLinks, deleteLink ,setLinks};
+    return { sortedLinks, deleteLink: deleteLinkHandler, setLinks};
 }

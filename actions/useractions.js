@@ -6,9 +6,6 @@ import argon2 from "argon2";
 import crypto from "crypto";
 import { sendEmails } from "@/lib/otpEmail";
 import ShortUrl from "@/models/ShortUrl";
-import { customAlphabet } from 'nanoid';
-import dns from "dns";
-import { URL } from "url";
 
 export const getUser = async (email) => {
     await connectDB();
@@ -20,9 +17,8 @@ export const getUser = async (email) => {
 
 export const getName = async (name, email) => {
     await connectDB();
-    const found = await User.findOne({ email });
-    if (found) {
-
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
         await User.updateOne({ email }, { $set: { name } });
     }
     return true;
@@ -55,10 +51,10 @@ export const createUserAccount = async (form) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const OTPid = crypto.randomBytes(16).toString("hex");
+    const otpId = crypto.randomBytes(16).toString("hex");
 
     await OtpStore.create({
-        otpId: OTPid,
+        otpId,
         email,
         name,
         password: hashedPassword,
@@ -68,31 +64,31 @@ export const createUserAccount = async (form) => {
 
     await sendEmails(email, name, otp);
 
-    return { email, success: true, OTPid };
+    return { email, success: true, otpId, OTPid: otpId };
 };
 
 export async function verifySignupOtp(email, otp) {
     await connectDB();
-    const record = await OtpStore.findOne({ email, otp });
+    const otpRecord = await OtpStore.findOne({ email, otp });
 
-    if (!record) {
+    if (!otpRecord) {
         return { error: "Invalid OTP" };
     }
 
-    if (record.expiresAt < Date.now()) {
+    if (otpRecord.expiresAt < Date.now()) {
         return { error: "OTP expired" };
     }
 
-    const existing = await User.findOne({ email });
+    const existingUser = await User.findOne({ email });
 
-    if (!existing) {
+    if (!existingUser) {
         await User.create({
-            email: record.email,
-            name: record.name,
+            email: otpRecord.email,
+            name: otpRecord.name,
             signUp: {
-                password: record.password,
-                name: record.name,
-                email: record.email,
+                password: otpRecord.password,
+                name: otpRecord.name,
+                email: otpRecord.email,
             },
         });
         await OtpStore.deleteMany({ email });
@@ -105,28 +101,28 @@ export async function verifySignupOtp(email, otp) {
 
 export async function resendSignupOtp(email) {
     await connectDB();
-    const record = await OtpStore.findOne({ email });
+    const otpRecord = await OtpStore.findOne({ email });
 
-    if (!record) {
+    if (!otpRecord) {
         return { error: "No OTP record found" };
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    record.otp = otp;
-    record.expiresAt = Date.now() + 5 * 60 * 1000;
-    record.attempts = 3;
-    await record.save();
+    otpRecord.otp = otp;
+    otpRecord.expiresAt = Date.now() + 5 * 60 * 1000;
+    otpRecord.attempts = 3;
+    await otpRecord.save();
 
-    await sendEmails(email, record.name, otp);
+    await sendEmails(email, otpRecord.name, otp);
     return { success: true };
 }
 
 export async function checkId(email, id) {
     await connectDB();
-    const record = await OtpStore.findOne({ email, otpId: id });
+    const otpRecord = await OtpStore.findOne({ email, otpId: id });
 
-    if (!record) return false;
-    if (record.expiresAt < Date.now()) return false;
+    if (!otpRecord) return false;
+    if (otpRecord.expiresAt < Date.now()) return false;
     return true;
 }
 
@@ -136,25 +132,25 @@ export const generateLoginOtp = async (form) => {
     const email = (form.email).trim();
     const password = (form.password).trim();
 
-    const existing = await User.findOne({ email }).lean();
-    if (!existing) {
+    const existingUser = await User.findOne({ email }).lean();
+    if (!existingUser) {
         return { success: false, error: "User not found. Please sign up first." };
     }
 
-    const userPasswordHash = existing.signUp?.password;
-    const userName = existing.signUp?.name || existing.name;
+    const storedPasswordHash = existingUser.signUp?.password;
+    const displayName = existingUser.signUp?.name || existingUser.name;
 
-    if (!userPasswordHash) {
+    if (!storedPasswordHash) {
         return { success: false, error: "User has no password. Please use social login or reset password." };
     }
 
-    const passwordMatch = await argon2.verify(userPasswordHash, password);
+    const passwordMatch = await argon2.verify(storedPasswordHash, password);
     if (!passwordMatch) {
         return { success: false, error: "Incorrect password." };
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const OTPid = crypto.randomBytes(16).toString("hex");
+    const otpId = crypto.randomBytes(16).toString("hex");
 
     const passwordLoginHash = await argon2.hash(password, {
         type: argon2.argon2id,
@@ -164,16 +160,16 @@ export const generateLoginOtp = async (form) => {
     });
 
     await OtpStore.create({
-        otpId: OTPid,
+        otpId,
         email,
-        name: userName,
+        name: displayName,
         password: passwordLoginHash,
         otp,
         expiresAt: Date.now() + 5 * 60 * 1000,
     });
 
-    await sendEmails(email, userName, otp);
-    return { email, success: true, OTPid };
+    await sendEmails(email, displayName, otp);
+    return { email, success: true, otpId, OTPid: otpId };
 };
 
 export async function updatePassword(email, password, confirmNewPassword) {
@@ -181,9 +177,9 @@ export async function updatePassword(email, password, confirmNewPassword) {
     let user = await User.findOne({ email: email })
 
     console.log(user)
-    let userPasswordHash = user.signUp.password;
-    console.log(userPasswordHash)
-    const passwordMatch = await argon2.verify(userPasswordHash, password);
+    let currentPasswordHash = user.signUp.password;
+    console.log(currentPasswordHash)
+    const passwordMatch = await argon2.verify(currentPasswordHash, password);
     if (!passwordMatch) {
         return { success: false, error: "Incorrect password." };
     }
@@ -199,84 +195,6 @@ export async function updatePassword(email, password, confirmNewPassword) {
     await user.save();
     console.log("done")
     return { success: true, message: "Password Updated Successfully." }
-}
-
-export async function forShortUrl(originalUrl, email) {
-    await connectDB()
-
-    let link = originalUrl.trim()
-
-    if (!link.startsWith("http://") && !link.startsWith("https://")) {
-        link = "http://" + link;
-    }
-
-    let url = new URL(link)
-    const BLOCKED_TLDS = ["zip", "xyz", "kim", "top", "click", "country"];
-
-    const SHORTENER_DOMAINS = [
-        "bit.ly",
-        "tinyurl.com",
-        "t.co",
-        "goo.gl",
-        "rebrand.ly",
-        "cutt.ly",
-        "is.gd"
-    ];
-
-    if (SHORTENER_DOMAINS.includes(url.hostname)) {
-        return { success: false, message: "Shortening another shortener is not allowed" };
-    }
-
-    const trackingParams = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "fbclid"];
-    trackingParams.forEach(param => url.searchParams.delete(param));
-
-    const host = url.hostname.toLowerCase();
-    const privatePatterns = [
-        /^localhost$/,
-        /^127\./,
-        /^10\./,
-        /^192\.168\./,
-        /^172\.(1[6-9]|2[0-9]|3[0-1])\./
-    ];
-
-    const tld = host.split(".").pop().toLowerCase();
-    if (BLOCKED_TLDS.includes(tld)) {
-        return { valid: false, message: "TLD not allowed due to spam issues" };
-    }
-
-    const domainExists = await new Promise((resolve) => {
-        dns.lookup(host, (err, address) => resolve(address || null));
-    });
-
-    if (!domainExists) {
-        return { valid: false, message: "Domain does not exist (DNS failed)" };
-    }
-
-    if (privatePatterns.some(p => p.test(domainExists))) {
-        return { valid: false, message: "Local/private URLs are blocked" };
-    }
-
-    let user = await User.findOne({ email })
-
-    if (!user) return { success: false, message: "Authentication required. Please log in." };
-
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const generateId = customAlphabet(alphabet, 6);
-
-    const shortId = generateId();
-
-    let already = await ShortUrl.findOne({ originalUrl: url.toString(), owner: user._id })
-    if (already) {
-        return { success: false, message: "This url shorten already have." }
-    }
-
-    let newUrl = await ShortUrl.create({
-        originalUrl: url.toString(),
-        shortId: shortId,
-        owner: user._id,
-    })
-
-    return { newUrl, success: true, message: "Url shorten is created." }
 }
 
 export async function forUserlink(email) {
@@ -300,10 +218,10 @@ export async function forUserlink(email) {
     return { success: true, links };
 }
 
-export async function deleteLink2(id) {
-    await connectDB()
-    let find = await ShortUrl.deleteOne({ _id: id })
+export async function deleteLink(id) {
+    await connectDB();
+    const deleteResult = await ShortUrl.deleteOne({ _id: id });
 
-    return { success: true, message: "Link deleted succesfully." }
+    return { success: true, message: "Link deleted successfully." };
 
 }
