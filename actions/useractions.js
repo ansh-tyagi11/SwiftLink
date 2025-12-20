@@ -7,7 +7,8 @@ import crypto from "crypto";
 import { sendEmails } from "@/lib/otpEmail";
 import ShortUrl from "@/models/ShortUrl";
 import { customAlphabet } from 'nanoid';
-import { log } from "console";
+import dns from "dns";
+import { URL } from "url";
 
 export const getUser = async (email) => {
     await connectDB();
@@ -209,20 +210,68 @@ export async function forShortUrl(originalUrl, email) {
         link = "http://" + link;
     }
 
+    let url = new URL(link)
+    const BLOCKED_TLDS = ["zip", "xyz", "kim", "top", "click", "country"];
+
+    const SHORTENER_DOMAINS = [
+        "bit.ly",
+        "tinyurl.com",
+        "t.co",
+        "goo.gl",
+        "rebrand.ly",
+        "cutt.ly",
+        "is.gd"
+    ];
+
+    if (SHORTENER_DOMAINS.includes(url.hostname)) {
+        return { success: false, message: "Shortening another shortener is not allowed" };
+    }
+
+    const trackingParams = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "fbclid"];
+    trackingParams.forEach(param => url.searchParams.delete(param));
+
+    const host = url.hostname.toLowerCase();
+    const privatePatterns = [
+        /^localhost$/,
+        /^127\./,
+        /^10\./,
+        /^192\.168\./,
+        /^172\.(1[6-9]|2[0-9]|3[0-1])\./
+    ];
+
+    const tld = host.split(".").pop().toLowerCase();
+    if (BLOCKED_TLDS.includes(tld)) {
+        return { valid: false, message: "TLD not allowed due to spam issues" };
+    }
+
+    const domainExists = await new Promise((resolve) => {
+        dns.lookup(host, (err, address) => resolve(address || null));
+    });
+
+    if (!domainExists) {
+        return { valid: false, message: "Domain does not exist (DNS failed)" };
+    }
+
+    if (privatePatterns.some(p => p.test(domainExists))) {
+        return { valid: false, message: "Local/private URLs are blocked" };
+    }
+
     let user = await User.findOne({ email })
+
+    if (!user) return { success: false, message: "Authentication required. Please log in." };
 
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const generateId = customAlphabet(alphabet, 6);
 
     const shortId = generateId();
 
-    let already = await ShortUrl.findOne({ originalUrl: link, owner: user._id })
+    let already = await ShortUrl.findOne({ originalUrl: url.toString(), owner: user._id })
     if (already) {
         return { success: false, message: "This url shorten already have." }
     }
 
     let newUrl = await ShortUrl.create({
-        originalUrl: link,
+        originalUrl: url.toString(),
         shortId: shortId,
         owner: user._id,
     })

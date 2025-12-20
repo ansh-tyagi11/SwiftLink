@@ -55,7 +55,7 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             {/*  Data Table  */}
-                            <div className="h-[60vh] overflow-auto bg-white dark:bg-[#151C2C] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hiden">
+                            <div className="h-[60vh] overflow-x-auto bg-white dark:bg-[#151C2C] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hiden">
                                 <div className="overflow-x-auto">
                                     <table className="min-w-full text-sm">
                                         <thead className="bg-gray-50 dark:bg-gray-900/50 text-left text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">
@@ -93,24 +93,6 @@ export default function Dashboard() {
                                             ))}
                                         </tbody >
                                     </table>
-                                </div>
-                                {/*  Pagination  */}
-                                <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 px-6 py-3">
-                                    <button className="flex items-center gap-2 px-4 h-8 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50" disabled="">
-                                        <span className="material-symbols-outlined text-xl">arrow_back</span>
-                                        Previous
-                                    </button>
-                                    <div className="hidden sm:flex items-center gap-1">
-                                        <Link className="flex items-center justify-center size-8 rounded-lg text-sm font-medium bg-primary text-white" href="#">1</Link>
-                                        <Link className="flex items-center justify-center size-8 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" href="#">2</Link>
-                                        <Link className="flex items-center justify-center size-8 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" href="#">3</Link>
-                                        <span className="text-gray-500">...</span>
-                                        <Link className="flex items-center justify-center size-8 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" href="#">8</Link>
-                                    </div>
-                                    <button className="flex items-center gap-2 px-4 h-8 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
-                                        Next
-                                        <span className="material-symbols-outlined text-xl">arrow_forward</span>
-                                    </button>
                                 </div>
                             </div>
                         </div>
