@@ -114,12 +114,11 @@ export default function Login() {
                               name="password"
                               value={credentials.password}
                               autoComplete="password"
-                              className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-lg text-[#140d1b] dark:text-gray-200 focus:outline-0 focus:ring-2 focus:ring-[#7f13ec]/50 border border-r-0 border-[#dbcfe7] dark:border-gray-700 bg-[#f7f6f8]  dark:bg-[#191022]  h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-3 pr-2 text-base font-normal leading-normal"
+                              className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#140d1b] dark:text-gray-200 focus:outline-0 focus:ring-2 focus:ring-[#7f13ec]/50 border border-[#dbcfe7] dark:border-gray-700 bg-background-lightdark:bg-[#191022]  h-12 placeholder:text-gray-400 dark:placeholder:text-gray-500 p-3 text-base font-normal leading-normal"
                               placeholder="Enter your password"
                               required
                               onChange={handleInputChange}
                             />
-                            <div className="text-gray-500 dark:text-gray-400 flex border border-l-0 border-[#dbcfe7] dark:border-gray-700 bg-[#f7f6f8]  dark:bg-[#191022]  items-center justify-center px-3 rounded-r-lg"></div>
                           </div>
                         </label>
                       </div>

@@ -3,7 +3,6 @@ import React from 'react'
 import SideBar from '@/components/SideBar';
 import TopNavBar from '@/components/TopNavBar';
 import { useState } from 'react';
-// import { forShortUrl } from '@/actions/useractions';
 import useUserData from '../hooks/useUserData';
 import { toast } from 'react-toastify';
 import useUserLinks from '../hooks/useUserLinks';
@@ -17,7 +16,6 @@ export default function SwiftLinkHome() {
         e.preventDefault();
 
         let email = data?.email || session?.user?.email
-        // let afterShortUrl = await forShortUrl(link, data.email || session.user.email)
 
         let res = await fetch("api/shorten", {
             method: "POST",
@@ -51,11 +49,11 @@ export default function SwiftLinkHome() {
                     <TopNavBar />
 
                     {/* Page Content */}
-                    <div className="flex-1 p-10 overflow-auto">
+                    <div className="flex-1 pt-10 p-6 md:p-10 md:pt-10 overflow-auto">
                         <div className="max-w-4xl mx-auto">
                             {/* URL Shortener Card */}
-                            <div className="p-6 rounded-xl bg-white shadow-lg">
-                                <div className="flex flex-wrap items-center gap-4">
+                            <div className="md:p-6 p-4 rounded-xl bg-white shadow-lg">
+                                <div className="flex flex-wrap items-center justify-center gap-4">
                                     <label className="flex flex-col min-w-40 flex-1">
                                         <input
                                             type='text'
@@ -72,31 +70,75 @@ export default function SwiftLinkHome() {
                             </div>
 
                             {/* Recent Activity Section */}
-                            <div className="mt-12 h-[50vh]">
+                            <div className="mt-12 h-[40vh] overflow-hidden">
                                 <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
-                                <div className="mt-6 flex flex-col gap-4">
+                                <div className="mt-6 md:block hidden">
+                                    <div className="flex flex-col gap-4">
+                                        {sortedLinks.length > 0 ?
+                                            sortedLinks.map((li) => {
+                                                return (
+                                                    <div key={li.shortId} className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md">
+                                                        <div className="flex flex-col gap-1">
+                                                            <p className="text-base font-semibold text-indigo-500">{process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}</p>
+                                                            <p className="text-sm text-gray-600 truncate max-w-md">{li.originalUrl}</p>
+                                                        </div>
+                                                        <div className="flex items-center gap-6">
+                                                            <p className="text-sm text-gray-600 whitespace-nowrap">{li.clicks}clicks - {Math.floor((Date.now() - new Date(li.createdAt)) / (1000 * 60))} mins ago</p>
+                                                            <button onClick={() => {
+                                                                navigator.clipboard.writeText(
+                                                                    `${process.env.NEXT_PUBLIC_BASE_URL}/${li.shortId}`
+                                                                ); toast.success("Copied!");
+                                                            }} className="p-2 rounded-lg hover:bg-slate-100 text-gray-600">
+                                                                <span className="text-xl">📋</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }) :
+                                            <div className='flex items-center justify-center'>No Links found.</div>
+                                        }
+                                    </div>
+                                </div>
 
-                                    {sortedLinks.length > 0 ?
-                                        sortedLinks.map((li) => {
-                                            return (
-                                                <div key={li.shortId} className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md">
-                                                    <div className="flex flex-col gap-1">
-                                                        <p className="text-base font-semibold text-indigo-500">{process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}</p>
-                                                        <p className="text-sm text-gray-600 truncate max-w-md">{li.originalUrl}</p>
-                                                    </div>
-                                                    <div className="flex items-center gap-6">
-                                                        <p className="text-sm text-gray-600 whitespace-nowrap">{li.clicks}clicks - {Math.floor((Date.now() - new Date(li.createdAt)) / (1000 * 60))} mins ago</p>
-                                                        <button onClick={() => navigator.clipboard.writeText(
-                                                            `${process.env.NEXT_PUBLIC_BASE_URL}/${li.shortId}`
-                                                        )} className="p-2 rounded-lg hover:bg-slate-100 text-gray-600">
-                                                            <span className="text-xl">📋</span>
-                                                        </button>
-                                                    </div>
+                                <div className='md:hidden block h-[40vh] overflow-hidden'>
+                                    {sortedLinks.length > 0 ? (
+                                        sortedLinks.map((li) => (
+                                            <div key={li.shortId} className="flex flex-col gap-3 rounded-lg bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between m-2 mr-0 ml-0">
+                                                {/* URL info */}
+                                                <div className="flex flex-col gap-1 min-w-0">
+                                                    <p className="text-sm font-semibold text-indigo-500 break-all">
+                                                        {process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}
+                                                    </p>
+
+                                                    <p className="text-xs text-gray-600 truncate sm:max-w-md">
+                                                        {li.originalUrl}
+                                                    </p>
                                                 </div>
-                                            )
-                                        }) :
-                                        <div className='flex items-center justify-center'>No Links found.</div>
-                                    }
+
+                                                {/* Meta + actions */}
+                                                <div className="flex items-center justify-between sm:justify-end sm:gap-6 ">
+                                                    <p className="text-xs text-gray-500 whitespace-nowrap">
+                                                        {li.clicks} clicks ·{" "}
+                                                        {Math.floor((Date.now() - new Date(li.createdAt)) / (1000 * 60))}m ago
+                                                    </p>
+
+                                                    <button
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(
+                                                                `${process.env.NEXT_PUBLIC_BASE_URL}/${li.shortId}`
+                                                            ); toast.success("Copied!");
+                                                        }}
+                                                        className="p-2 rounded-lg hover:bg-slate-100 :bg-slate-200 text-gray-600">
+                                                        <span className="text-lg">📋</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="flex items-center justify-center py-10 text-sm text-gray-500">
+                                            No links found.
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

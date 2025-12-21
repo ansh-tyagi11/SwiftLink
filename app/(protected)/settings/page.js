@@ -4,6 +4,7 @@ import SideBar from '@/components/SideBar';
 import { getName, updatePassword } from '@/actions/useractions';
 import { toast } from 'react-toastify';
 import useUserData from '../hooks/useUserData';
+import TopNavBar from '@/components/TopNavBar';
 
 export default function SwiftLinkSettings() {
     const { data, setData, session } = useUserData();
@@ -60,8 +61,10 @@ export default function SwiftLinkSettings() {
             {/* Sidebar */}
             <SideBar />
 
+
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto p-8">
+            <main className="flex-1 overflow-y-auto md:p-8 p-6 pt-8">
+                <div className='md:hidden block'><TopNavBar /></div>
                 <div className="mx-auto flex max-w-4xl flex-col gap-8">
                     {/* Profile Section */}
                     <div>

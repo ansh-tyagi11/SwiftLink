@@ -4,6 +4,7 @@ import Link from 'next/link';
 import SideBar from '@/components/SideBar';
 import TopNavBar from '@/components/TopNavBar';
 import useUserLinks from '../hooks/useUserLinks';
+import { toast } from 'react-toastify';
 
 export default function Dashboard() {
     let { sortedLinks, deleteLink } = useUserLinks();
@@ -15,16 +16,16 @@ export default function Dashboard() {
     return (
         <div className="font-display bg-[#f6f6f8]  dark:bg-[#101622]  text-[#171A1C] dark:text-gray-200">
             <div className="relative flex min-h-screen w-full flex-col">
-                <div className="flex h-full w-full flex-1">
+                <div className="flex h-full w-full flex-1 overflow-x-hidden overflow-y-hidden">
 
                     {/*  SideNavBar  */}
                     <SideBar />
 
                     {/*  Main Content  */}
-                    <main className="flex flex-1 flex-col pt-0 p-6 lg:p-8 lg:pt-0">
-                        <div className='-ml-8'><TopNavBar /></div>
+                    <main className="flex flex-1 flex-col lg:p-8 lg:pt-0" style={{ padding: 0 }}>
+                        <div className='md:-ml-8 ml-0'><TopNavBar /></div>
 
-                        <div className="w-full max-w-7xl mx-auto">
+                        <div className="w-full max-w-7xl mx-auto p-6">
                             {/*  PageHeading  */}
                             <div className="flex flex-wrap justify-between items-center gap-4 mb-6 pt-6">
                                 <div className="flex flex-col">
@@ -37,11 +38,11 @@ export default function Dashboard() {
                                 <div className="w-full sm:max-w-xs">
                                     <label className="flex flex-col w-full">
                                         <div className="flex w-full flex-1 items-stretch rounded-lg h-10">
-                                            <div className="text-[#4c669a] dark:text-gray-400 flex bg-white dark:bg-[#151C2C] items-center justify-center pl-3 rounded-l-lg border border-gray-300 dark:border-gray-700 border-r-0">
+                                            <div className="text-[#4c669a] dark:text-gray-400 flex bg-white dark:bg-[#151C2C] items-center justify-center p-3 rounded-l-lg border border-gray-300 dark:border-gray-700 border-r-0">
                                                 <span className="material-symbols-outlined text-xl">search</span>
                                             </div>
                                             <input
-                                                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#151C2C] focus:border-[#135bec] h-full placeholder:text-[#4c669a] dark:placeholder:text-gray-500 px-3 pl-2 text-sm"
+                                                className="form-input p-3 pb-[17px] w-full rounded-r-lg text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#151C2C] outline-none focus:outline-none focus:ring-0 placeholder:text-[#4c669a] dark:placeholder:text-gray-500 text-sm"
                                                 placeholder="Search your links..."
                                             />
                                         </div>
@@ -55,7 +56,7 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             {/*  Data Table  */}
-                            <div className="h-[60vh] overflow-x-auto bg-white dark:bg-[#151C2C] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hiden">
+                            <div className="h-[60vh] hidden md:block overflow-y-auto bg-white dark:bg-[#151C2C] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
                                 <div className="overflow-x-auto">
                                     <table className="min-w-full text-sm">
                                         <thead className="bg-gray-50 dark:bg-gray-900/50 text-left text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">
@@ -73,8 +74,12 @@ export default function Dashboard() {
                                                 <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                         <div className="flex items-center gap-2">
-                                                            <Link className="font-medium text-[#135bec] hover:underline" href="#">{process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}</Link>
-                                                            <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                                                            <Link className="font-medium text-[#135bec] hover:underline" href={`${li.originalUrl}`} target="_blank">{process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}</Link>
+                                                            <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" onClick={() => {
+                                                                navigator.clipboard.writeText(
+                                                                    `${process.env.NEXT_PUBLIC_BASE_URL}/${li.shortId}`
+                                                                ); toast.success("Copied!");
+                                                            }}>
                                                                 <span className="material-symbols-outlined text-base">content_copy</span>
                                                             </button>
                                                         </div>
@@ -95,6 +100,65 @@ export default function Dashboard() {
                                     </table>
                                 </div>
                             </div>
+
+                            {/* Mobile Cards */}
+                            <div className="md:hidden h-[60vh] w-full max-w-full space-y-4 overflow-x-hidden">
+                                {sortedLinks.map((li) => (
+                                    <div key={li._id}
+                                        className="w-full max-w-full bg-white dark:bg-[#151C2C] border border-gray-200 dark:border-gray-800 rounded-xl p-4 space-y-2 overflow-hidden">
+                                        {/* Short Link */}
+                                        <div className="w-full">
+                                            <p className="text-xs text-gray-500">Short Link</p>
+                                            <div className='flex items-center gap-0'>
+                                                <Link className="text-[#135bec] font-medium break-all w-full" href={`${li.originalUrl}`} target="_blank">
+                                                    {process.env.NEXT_PUBLIC_BASE_URL}/{li.shortId}
+                                                </Link>
+                                                <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" onClick={() => {
+                                                    navigator.clipboard.writeText(
+                                                        `${process.env.NEXT_PUBLIC_BASE_URL}/${li.shortId}`
+                                                    ); toast.success("Copied!");
+                                                }}>
+                                                    <span className="material-symbols-outlined text-base">content_copy</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Original URL */}
+                                        <div className="w-full">
+                                            <p className="text-xs text-gray-500">Original URL</p>
+                                            <p className="text-sm text-gray-700 dark:text-gray-300 break-all w-full">
+                                                {li.originalUrl}
+                                            </p>
+                                        </div>
+
+                                        {/* Stats */}
+                                        <div className="flex justify-between text-sm w-full">
+                                            <div className="min-w-0">
+                                                <p className="text-gray-500 text-xs">Clicks</p>
+                                                <p>{li.clicks}</p>
+                                            </div>
+
+                                            <div className="min-w-0 text-right">
+                                                <p className="text-gray-500 text-xs">Created</p>
+                                                <p className="whitespace-nowrap">
+                                                    {new Date(li.createdAt).toDateString()}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Action */}
+                                        <button
+                                            onClick={() => handleDelete(li._id)}
+                                            className="w-full mt-2 py-2 text-sm rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+
+
+
                         </div>
                     </main>
                 </div>
