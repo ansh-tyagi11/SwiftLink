@@ -1,13 +1,34 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const SideBar = () => {
+    const { data: session } = useSession();
     const pathname = usePathname();
+    const router=useRouter();
 
     const isActive = (path) => pathname === path;
+
+    const logOut = async () => {
+        if (session) {
+            signOut();
+            return;
+        }
+
+        const res = await fetch("/api/logout", {
+            method: "POST",
+            credentials: "include", 
+        });
+        let data=await res.json();
+        if (data.success) {
+            toast.success(data.message)
+            router.push("/login")
+            console.log("Log out")
+        }
+    }
 
     return (
         <>
@@ -20,7 +41,7 @@ const SideBar = () => {
                                     className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-10"
                                     style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBcYiF_jiKYGvK0RxiZawDaWliD4EQh-uJ2XQxnAnve-AjLeuTxel5w3NAUe4_kxgcKzgbaXIomcxcHgnXzBZ4mZ5HzvDLXnW7qc1v3vjcBf0C9blCgUXkdZlvAYMbe9195TM2XiaF_IzNlXYBJUU3CvRwOyZdoZrYA2aHj-PS8IJwVCpvWy7XW-pK6ax0tJT3qjnQ8bnzSwv1eksVVkeK7n8rqPosVj7IzKVhH1L_3SIGjnNVVS-AXCil7Jca-byM8yGXu2Lu5-ofG")' }}
                                 />
-                                <h1 className="text-gray-900 dark:text-white text-lg font-bold leading-normal">SwiftLink</h1>
+                                <h1 className="text-gray-900 dark:text-white text-lg font-bold leading-normal">LinkShortly</h1>
                             </div>
                         </div>
                         <nav className="flex flex-col justify-items-start gap-2 mt-4">
@@ -48,7 +69,7 @@ const SideBar = () => {
                             <span className="material-symbols-outlined text-xl">help</span>
                             <p className="text-sm font-medium leading-normal hidden md:block">Help Center</p>
                         </Link>
-                        <button onClick={() => signOut()} className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#0d121b] dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" href="#">
+                        <button onClick={logOut} className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#0d121b] dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800" href="#">
                             <span className="material-symbols-outlined text-xl">logout</span>
                             <p className="text-sm font-medium leading-normal hidden md:block">Log out</p>
                         </button>

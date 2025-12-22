@@ -79,7 +79,7 @@ export default function Contact() {
                                 <p className="text-sm text-gray-500 dark:text-gray-400">
                                     Prefer to email directly? Contact us at
                                     <a className="font-medium text-[#6062f6] hover:underline hover:text-[#6062f6]/80 transition-colors"
-                                        href="mailto:support@swiftlink.com">support@swiftlink.com</a>
+                                        href="mailto:contact.linkshortly@gmail.com">contact.linkshortly@gmail.com</a>
                                 </p>
                             </div>
                         </div>

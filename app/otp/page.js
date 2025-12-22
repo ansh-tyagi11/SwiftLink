@@ -119,7 +119,7 @@ export default function VerifyPage() {
               </defs>
             </svg>
           </div>
-          <h2 className="text-2xl font-bold leading-tight tracking-[-0.015em]">SwiftLink</h2>
+          <h2 className="text-2xl font-bold leading-tight tracking-[-0.015em]">LinkShortly</h2>
         </header>
 
         {/* Main */}

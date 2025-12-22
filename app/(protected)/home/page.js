@@ -7,7 +7,7 @@ import useUserData from '../hooks/useUserData';
 import { toast } from 'react-toastify';
 import useUserLinks from '../hooks/useUserLinks';
 
-export default function SwiftLinkHome() {
+export default function LinkShortlyHome() {
     const { data, session } = useUserData();
     const { sortedLinks, setLinks } = useUserLinks();
     const [link, setLink] = useState("");
@@ -27,14 +27,15 @@ export default function SwiftLinkHome() {
 
         if (!afterShortUrl.success) {
             toast.error(afterShortUrl.message)
+            setLink("")
             return;
         }
         if (afterShortUrl.success) {
             toast.success(afterShortUrl.message)
             setLinks(prev => [afterShortUrl.newUrl, ...prev]);
+            setLink("");
             return;
         }
-        setLink(" ");
     }
 
     return (
@@ -58,9 +59,11 @@ export default function SwiftLinkHome() {
                                         <input
                                             type='text'
                                             name='text'
+                                            value={link}
                                             onChange={(e) => setLink(e.target.value)}
                                             className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 border border-slate-300 bg-gray-50 h-14 placeholder:text-gray-600 p-4 text-base font-normal leading-normal"
                                             placeholder="Paste a long URL to shorten..."
+                                            required
                                         />
                                     </label>
                                     <button onClick={shortUrl} type='submit' className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-8 bg-linear-to-r from-indigo-500 to-purple-500 text-white text-base font-bold leading-normal tracking-wide hover:opacity-90 transition-opacity">

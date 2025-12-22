@@ -86,7 +86,7 @@ export default function SignUpPage() {
                     <path d="M50 50 L 130 120" filter="url(#glow)" stroke="url(#glow-grad)" strokeOpacity="0.3" strokeWidth="0.5"></path>
                     <path d="M150 50 L 70 120" filter="url(#glow)" stroke="url(#glow-grad)" strokeOpacity="0.3" strokeWidth="0.5"></path>
                   </svg>
-                  <h1 className="mt-8 text-4xl font-black tracking-tight text-white">SwiftLink</h1>
+                  <h1 className="mt-8 text-4xl font-black tracking-tight text-white">LinkShortly</h1>
                   <p className="mt-2 text-lg font-light text-gray-200">Shorten. Share. Succeed.</p>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default function SignUpPage() {
                       Create an Account
                     </h2>
                     <p className="mt-2 text-center text-base font-normal leading-normal text-[#140d1b]/70 dark:text-white/70">
-                      Get started with SwiftLink and shorten your first URL in seconds.
+                      Get started with LinkShortly and shorten your first URL in seconds.
                     </p>
                   </div>
 

@@ -22,7 +22,7 @@ const Navbar = () => {
                                         </defs>
                                     </svg>
                                 </div>
-                                <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] dark:text-white">SwiftLink</h2>
+                                <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] dark:text-white">LinkShortly</h2>
                             </div>
                             <div className="hidden md:flex flex-1 justify-center gap-9">
                                 <Link className="text-sm font-medium leading-normal hover:text-[#135bec] dark:text-gray-300 dark:hover:text-[#135bec]" href="/about">About</Link>

@@ -54,7 +54,7 @@ export default function Login() {
               </div>
               <div className="relative z-10 flex flex-col items-start p-16 text-white">
                 <h2 className="text-4xl font-bold tracking-tighter text-white mb-2">
-                  SwiftLink
+                  LinkShortly
                 </h2>
                 <p className="text-xl text-white/80 max-w-md">
                   Shorten, share, and track your links with unparalleled speed and precision.
@@ -71,7 +71,7 @@ export default function Login() {
                       Log In
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400 mt-2 text-base">
-                      Welcome back to SwiftLink.
+                      Welcome back to LinkShortly.
                     </p>
                   </div>
 

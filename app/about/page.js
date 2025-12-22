@@ -159,7 +159,7 @@ export default function About() {
                                 <div className="relative z-10 flex flex-col items-center gap-6">
                                     <h2 className="text-3xl md:text-4xl font-black leading-tight">Ready to streamline your links?</h2>
                                     <p className="text-blue-100 text-lg max-w-xl">Join thousands of marketers and developers who trust
-                                        SwiftLink for their URL shortening needs.</p>
+                                        LinkShortly for their URL shortening needs.</p>
                                     <div className="flex flex-col sm:flex-row gap-4 mt-4">
                                         <Link href="/login">
                                             <button

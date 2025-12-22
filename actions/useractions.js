@@ -181,7 +181,7 @@ export async function updatePassword(email, password, confirmNewPassword) {
     console.log(currentPasswordHash)
     const passwordMatch = await argon2.verify(currentPasswordHash, password);
     if (!passwordMatch) {
-        return { success: false, error: "Incorrect password." };
+        return { success: false, message: "Incorrect password." };
     }
 
     const newHashedPassword = await argon2.hash(confirmNewPassword, {

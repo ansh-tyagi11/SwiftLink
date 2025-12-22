@@ -6,35 +6,28 @@ import { toast } from 'react-toastify';
 import useUserData from '../hooks/useUserData';
 import TopNavBar from '@/components/TopNavBar';
 
-export default function SwiftLinkSettings() {
+export default function LinkShortlySettings() {
     const { data, setData, session } = useUserData();
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    // const [error, setError] = useState(false)
-
-    // useEffect(() => {
-    //     if (status === "loading") return;
-
-    //     userData();
-    // }, [status]);
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         // If either field is empty, don't show error
         if (!newPassword || !confirmNewPassword) {
-            // setError(true);
+            setError(true);
             return;
         }
 
         // If passwords don't match
         if (newPassword !== confirmNewPassword) {
-            // setError(true);
-            // toast.error("Passwords do not match"); // show toast immediately
+            setError(true);
         }
-        // else {
-        //     setError(false); // passwords match → clear error
-        // }
+        else {
+            setError(false); // passwords match → clear error
+        }
     }, [newPassword, confirmNewPassword]);
 
     const updateName = async () => {
@@ -50,6 +43,9 @@ export default function SwiftLinkSettings() {
         const updatedPassword = await updatePassword(data.email, password, confirmNewPassword);
         if (updatedPassword.success && updatedPassword.message) {
             toast.success(updatedPassword.message)
+        }
+        if(!updatedPassword.success){
+            toast.error(updatedPassword.message)
         }
         setPassword("")
         setNewPassword("")
@@ -150,6 +146,7 @@ export default function SwiftLinkSettings() {
                                             <input
                                                 type="password"
                                                 name='oldpassword'
+                                                value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 className="h-11 w-full rounded-lg border border-gray-300 bg-transparent p-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                                 placeholder="Enter current password"
@@ -162,6 +159,7 @@ export default function SwiftLinkSettings() {
                                             <input
                                                 type="password"
                                                 name='newpassword'
+                                                value={newPassword}
                                                 onChange={(e) => setNewPassword(e.target.value)}
                                                 className="h-11 w-full rounded-lg border border-gray-300 bg-transparent p-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                                 placeholder="Enter new password"
@@ -174,8 +172,9 @@ export default function SwiftLinkSettings() {
                                             <input
                                                 type="password"
                                                 name='confirmpassword'
+                                                value={confirmNewPassword}
                                                 onChange={(e) => setConfirmNewPassword(e.target.value)}
-                                                className="h-11 w-full rounded-lg border border-gray-300 bg-transparent p-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                className={error ? 'h-11 w-full rounded-lg border border-gray-300 bg-transparent p-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500' : 'h-11 w-full rounded-lg border border-gray-300 bg-transparent p-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500'}
                                                 placeholder="Enter new password"
                                                 required={true}
                                             />
@@ -184,8 +183,8 @@ export default function SwiftLinkSettings() {
                                 </div>
 
                                 <div className="flex items-center justify-end gap-3 border-t border-gray-200 bg-gray-50 px-6 py-4">
-                                    {/* <button type='submit' disabled={!password || !newPassword || !confirmNewPassword || error} className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700"> */}
-                                    <button type='submit' className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700">
+                                    <button type='submit' disabled={!password || !newPassword || !confirmNewPassword || error} className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700">
+                                        {/* <button type='submit' className="flex h-9 min-w-[84px] items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white hover:bg-indigo-700"> */}
                                         Update Password
                                     </button>
                                 </div>

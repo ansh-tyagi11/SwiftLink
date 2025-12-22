@@ -2,14 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { getUser } from '@/actions/useractions';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 const TopNavBar = () => {
     const { data: session, status } = useSession()
     const [data, setData] = useState({})
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
+    const router = useRouter()
 
     const isActive = (path) => pathname === path;
 
@@ -40,6 +42,23 @@ const TopNavBar = () => {
         }
     }
 
+    const logOut = async () => {
+        if (session) {
+            signOut();
+            return;
+        }
+
+        const res = await fetch("/api/logout", {
+            method: "POST",
+            credentials: "include",
+        });
+        let data = await res.json();
+        if (data.success) {
+            toast.success(data.message)
+            router.push("/login")
+            console.log("Log out")
+        }
+    }
 
     return (
         <>
@@ -97,7 +116,6 @@ const TopNavBar = () => {
                         <aside
                             className={`fixed md:static inset-y-0 right-0 z-40 flex flex-col justify-between w-64 md:w-64 lg:w-72 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#151C2C] p-4 md:p-4 lg:p-6 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}`}>
 
-                            {/* <aside className={`fixed md:static inset-y-0 right-0 z-40 flex flex-col justify-between w-64 md:w-64 lg:w-72 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#151C2C] p-4 md:p-4 lg:p-6 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}> */}
                             <div className="flex flex-col gap-4">
                                 {/* Logo Section */}
                                 <div className="flex items-center gap-3 p-2">
@@ -163,7 +181,7 @@ const TopNavBar = () => {
 
                                 <button
                                     onClick={() => {
-                                        signOut();
+                                        logOut();
                                         setIsOpen(false);
                                     }}
                                     className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#0d121b] dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

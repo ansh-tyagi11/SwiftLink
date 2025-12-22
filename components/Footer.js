@@ -32,7 +32,7 @@ export default function Footer() {
                     </div>
                 </Link>
             </div>
-            <p className="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">&copy; {new Date().getFullYear()} ·{" "} SwiftLink. All rights reserved.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">&copy; {new Date().getFullYear()} ·{" "} LinkShortly. All rights reserved.</p>
         </footer>
     )
 }

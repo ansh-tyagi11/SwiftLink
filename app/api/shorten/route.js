@@ -12,6 +12,10 @@ export async function POST(req) {
 
     let link = originalUrl.trim()
 
+    if (typeof link !== "string" || /^\d+$/.test(link)) {
+        return new Response(JSON.stringify({success: false, message: "Invalid URL"}));
+    }
+
     if (!link.startsWith("http://") && !link.startsWith("https://")) {
         link = "http://" + link;
     }

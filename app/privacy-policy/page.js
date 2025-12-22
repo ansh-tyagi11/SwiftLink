@@ -36,7 +36,7 @@ export default function PrivacyPolicy() {
                                     </div>
                                     <div className="prose prose-lg dark:prose-invert max-w-none text-[#616f89] dark:text-gray-300">
                                         <p className="leading-relaxed mb-4">
-                                            At SwiftLink, we prioritize your privacy and transparency. This policy outlines exactly
+                                            At LinkShortly, we prioritize your privacy and transparency. This policy outlines exactly
                                             what data we collect, why we collect it, and how we protect it. We are committed to
                                             ensuring your personal information remains secure.
                                         </p>
@@ -64,7 +64,7 @@ export default function PrivacyPolicy() {
                                                 User Account Data
                                             </h3>
                                             <p className="text-[#616f89] dark:text-gray-300 leading-relaxed text-base">
-                                                When you register for a SwiftLink account, we collect personal information such as
+                                                When you register for a LinkShortly account, we collect personal information such as
                                                 your username, email address, and password. If you subscribe to a paid plan, we also
                                                 collect billing information, though payment processing is handled by our secure
                                                 third-party partners (e.g., Stripe).
@@ -85,7 +85,7 @@ export default function PrivacyPolicy() {
                                                     (City/Country).</li>
                                                 <li><strong>Device Information:</strong> Browser type, operating system, and device
                                                     type (Mobile/Desktop).</li>
-                                                <li><strong>Referrer URL:</strong> The website where the SwiftLink URL was clicked.
+                                                <li><strong>Referrer URL:</strong> The website where the LinkShortly URL was clicked.
                                                 </li>
                                                 <li><strong>Time &amp; Date:</strong> The exact timestamp of the click event.</li>
                                             </ul>
@@ -194,7 +194,7 @@ export default function PrivacyPolicy() {
                                         <h2 className="text-2xl md:text-3xl font-bold text-[#111318] dark:text-white">User Rights</h2>
                                     </div>
                                     <p className="text-[#616f89] dark:text-gray-300 leading-relaxed text-base mb-6">
-                                        You have specific rights regarding your data. SwiftLink is committed to facilitating the
+                                        You have specific rights regarding your data. LinkShortly is committed to facilitating the
                                         exercise of these rights:
                                     </p>
                                     <div className="space-y-4">
@@ -226,9 +226,9 @@ export default function PrivacyPolicy() {
                                         <p className="text-sm text-[#616f89] dark:text-gray-400 mb-3">If you wish to exercise any of
                                             these rights, please contact our Data Protection Officer at:</p>
                                         <a className="inline-flex items-center gap-2 text-[#135bec] font-bold hover:underline"
-                                            href="mailto:privacy@swiftlink.com">
+                                            href="mailto:contact.linkshortly@gmail.com">
                                             <span className="material-symbols-outlined text-[18px]">mail</span>
-                                            privacy@swiftlink.com
+                                            contact.linkshortly@gmail.com
                                         </a>
                                     </div>
                                 </section>
