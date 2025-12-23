@@ -27,10 +27,10 @@ export default function useUserData() {
             if (verifyiedUser) {
                 setData(verifyiedUser)
             }
-            console.log(verifyResponse.user);
+            
         }
         catch (error) {
-            console.log(error)
+            return error;
         }
     }
     

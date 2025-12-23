@@ -176,9 +176,8 @@ export async function updatePassword(email, password, confirmNewPassword) {
     await connectDB();
     let user = await User.findOne({ email: email })
 
-    console.log(user)
     let currentPasswordHash = user.signUp.password;
-    console.log(currentPasswordHash)
+   
     const passwordMatch = await argon2.verify(currentPasswordHash, password);
     if (!passwordMatch) {
         return { success: false, message: "Incorrect password." };
@@ -193,13 +192,12 @@ export async function updatePassword(email, password, confirmNewPassword) {
 
     user.signUp.password = newHashedPassword;
     await user.save();
-    console.log("done")
+    
     return { success: true, message: "Password Updated Successfully." }
 }
 
 export async function forUserlink(email) {
     await connectDB();
-    console.log(email)
 
     const user = await User.findOne({ email });
     if (!user) {

@@ -36,7 +36,6 @@ export default function LinkShortlySettings() {
         // setData(prev => ({ ...prev, name: updatedName }));
         toast.success("Name updated successfully!");
     }
-    console.log(name)
 
     const handleSubmit = async (e) => {
         e.preventDefault();

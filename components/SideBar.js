@@ -26,7 +26,6 @@ const SideBar = () => {
         if (data.success) {
             toast.success(data.message)
             router.push("/login")
-            console.log("Log out")
         }
     }
 

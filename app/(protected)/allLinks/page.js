@@ -18,8 +18,9 @@ export default function Dashboard() {
         let a = await updatedClick(id)
 
         if (a.success) {
-            console.log("HO gya")
+            return true;
         }
+        return false;
     }
 
     return (

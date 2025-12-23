@@ -32,9 +32,5 @@ export default function useUserLinks() {
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
 
-
-    console.log(links)
-    console.log("links is array:", Array.isArray(links), links.length);
-
     return { sortedLinks, deleteLink: deleteLinkHandler, setLinks};
 }

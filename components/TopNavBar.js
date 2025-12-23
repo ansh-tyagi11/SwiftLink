@@ -35,10 +35,10 @@ const TopNavBar = () => {
             if (a) {
                 setData(a)
             }
-            console.log(data2.user);
+           
         }
         catch (error) {
-            console.log(error)
+            return error;
         }
     }
 
@@ -56,7 +56,6 @@ const TopNavBar = () => {
         if (data.success) {
             toast.success(data.message)
             router.push("/login")
-            console.log("Log out")
         }
     }
 
